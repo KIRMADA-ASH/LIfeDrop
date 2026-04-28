@@ -1,0 +1,15 @@
+from django.contrib.auth.models import AbstractUser
+from django.db import models
+
+class CustomUser(AbstractUser):
+    USER_TYPES = (
+        ('donor', 'Donor'),
+        ('recipient', 'Recipient'),
+    )
+
+    user_type = models.CharField(max_length=10, choices=USER_TYPES)
+    phone = models.CharField(max_length=15)
+    city = models.CharField(max_length=100)
+
+    def __str__(self):
+        return self.username

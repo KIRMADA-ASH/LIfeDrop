@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<div class="text-center mb-5" data-aos="fade-up">
+    <h1 class="display-4 fw-bold">Donate Blood, Save Lives ❤️</h1>
+    <p class="lead">Real-time blood availability system</p>
+
+    <a href="/register/" class="btn btn-success btn-lg m-2">Get Started</a>
+    <a href="/inventory/" class="btn btn-outline-light btn-lg m-2">View Inventory</a>
+</div>
+
+<div class="row text-center">
+
+    <div class="col-md-4" data-aos="zoom-in">
+        <div class="card bg-dark p-4 shadow">
+            <i class="bi bi-droplet-fill text-danger fs-1"></i>
+            <h4 class="mt-3">Donate Blood</h4>
+            <p>Help patients in need</p>
+        </div>
+    </div>
+
+    <div class="col-md-4" data-aos="zoom-in">
+        <div class="card bg-dark p-4 shadow">
+            <i class="bi bi-search text-info fs-1"></i>
+            <h4 class="mt-3">Search Blood</h4>
+            <p>Find available blood instantly</p>
+        </div>
+    </div>
+
+    <div class="col-md-4" data-aos="zoom-in">
+        <div class="card bg-dark p-4 shadow">
+            <i class="bi bi-heart-pulse text-success fs-1"></i>
+            <h4 class="mt-3">Save Lives</h4>
+            <p>Be someone's hero today</p>
+        </div>
+    </div>
+
+</div>
+
+{% endblock %}

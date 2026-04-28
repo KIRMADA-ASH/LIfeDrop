@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<h2 class="text-center mb-4">Blood Inventory 🩸</h2>
+
+<div class="row">
+{% for item in data %}
+    <div class="col-md-3 mb-4" data-aos="fade-up">
+        <div class="card text-center bg-dark p-3 shadow">
+            <h3 class="text-danger">{{ item.blood_group }}</h3>
+            <h5>{{ item.units_available }} Units</h5>
+        </div>
+    </div>
+{% endfor %}
+</div>
+
+{% endblock %}
