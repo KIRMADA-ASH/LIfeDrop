@@ -1,1 +1,94 @@
-<h2>Welcome Recipient 🏥</h2>
+{% extends 'base.html' %}
+{% block title %}PulsePoint | Recipient Dashboard{% endblock %}
+{% block content %}
+<section class="hero-panel reveal">
+    <div class="row g-4 align-items-center">
+        <div class="col-lg-7">
+            <div class="eyebrow">Recipient dashboard</div>
+            <h1 class="hero-title">Support decisions, minus the confusion.</h1>
+            <p class="hero-copy">Your dashboard now brings request activity, live inventory highlights, and next actions into one polished view.</p>
+            <div class="button-row">
+                <a href="{% url 'request_blood' %}" class="primary-btn">Create new request</a>
+                <a href="{% url 'request_status' %}" class="secondary-btn">Check request status</a>
+            </div>
+        </div>
+        <div class="col-lg-5">
+            <div class="glass-card reveal">
+                <div class="kicker">Inventory preview</div>
+                <div class="inventory-chip-row">
+                    {% for item in inventory_snapshot %}
+                        <div class="inventory-chip">
+                            <strong>{{ item.blood_group }}</strong>
+                            <span>{{ item.units_available }} units</span>
+                        </div>
+                    {% empty %}
+                        <div class="inventory-chip">
+                            <strong>No inventory yet</strong>
+                            <span>Add blood groups in admin.</span>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="metric-grid mt-4">
+    <div class="metric-card reveal">
+        <div class="metric-label">Total requests</div>
+        <div class="metric-value" data-count="{{ request_count }}">0</div>
+        <div class="metric-note">All requests submitted by your account.</div>
+    </div>
+    <div class="metric-card reveal">
+        <div class="metric-label">Pending</div>
+        <div class="metric-value" data-count="{{ pending_count }}">0</div>
+        <div class="metric-note">Requests still waiting for review.</div>
+    </div>
+    <div class="metric-card reveal">
+        <div class="metric-label">Approved</div>
+        <div class="metric-value" data-count="{{ approved_count }}">0</div>
+        <div class="metric-note">Requests that were successfully approved.</div>
+    </div>
+    <div class="metric-card reveal">
+        <div class="metric-label">Available groups</div>
+        <div class="metric-value" data-count="{{ inventory_snapshot|length }}">0</div>
+        <div class="metric-note">Visible inventory groups in the dashboard preview.</div>
+    </div>
+</section>
+
+<section class="card-grid two mt-4">
+    <article class="timeline-card reveal">
+        <div class="kicker">Recent requests</div>
+        <h2 class="section-title">Latest activity</h2>
+        <div class="auth-list">
+            {% for item in recent_requests %}
+                <div class="auth-list-item">
+                    <strong>{{ item.blood_group }} for {{ item.units }} units in {{ item.city }}</strong>
+                    Current status:
+                    {% if item.status == 'Approved' %}
+                        approved.
+                    {% elif item.status == 'Rejected' %}
+                        rejected.
+                    {% else %}
+                        pending review.
+                    {% endif %}
+                </div>
+            {% empty %}
+                <div class="auth-list-item">
+                    <strong>No requests yet</strong>
+                    Start by creating your first blood request.
+                </div>
+            {% endfor %}
+        </div>
+    </article>
+    <article class="cta-card reveal">
+        <div class="kicker">Next steps</div>
+        <h2 class="section-title">Move quickly from this dashboard</h2>
+        <p class="section-copy">Everything important is one click away, so the page feels useful the moment you land here.</p>
+        <div class="button-row">
+            <a href="{% url 'request_blood' %}" class="primary-btn">Submit blood request</a>
+            <a href="{% url 'inventory' %}" class="ghost-btn">Browse inventory</a>
+        </div>
+    </article>
+</section>
+{% endblock %}

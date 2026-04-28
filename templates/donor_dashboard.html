@@ -1,1 +1,88 @@
-<h2>Welcome Donor 🩸</h2>
+{% extends 'base.html' %}
+{% block title %}PulsePoint | Donor Dashboard{% endblock %}
+{% block content %}
+<section class="hero-panel reveal">
+    <div class="row g-4 align-items-center">
+        <div class="col-lg-7">
+            <div class="eyebrow">Donor dashboard</div>
+            <h1 class="hero-title">Welcome back, {{ request.user.username }}.</h1>
+            <p class="hero-copy">This donor dashboard gives you a clearer view of current demand, live inventory health, and where support may soon be needed.</p>
+            <div class="button-row">
+                <a href="{% url 'inventory' %}" class="primary-btn">Review inventory</a>
+                <a href="{% url 'home' %}" class="secondary-btn">Back to overview</a>
+            </div>
+        </div>
+        <div class="col-lg-5">
+            <div class="glass-card reveal">
+                <div class="kicker">Donor impact</div>
+                <p class="section-copy mb-3">Even without complex operations yet, this workspace now gives donors a polished place to stay informed.</p>
+                <div class="inventory-chip-row">
+                    {% for item in inventory_snapshot %}
+                        <div class="inventory-chip">
+                            <strong>{{ item.blood_group }}</strong>
+                            <span>{{ item.units_available }} units</span>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="metric-grid mt-4">
+    <div class="metric-card reveal">
+        <div class="metric-label">Total inventory units</div>
+        <div class="metric-value" data-count="{{ total_units }}">0</div>
+        <div class="metric-note">Current available stock in the system.</div>
+    </div>
+    <div class="metric-card reveal">
+        <div class="metric-label">Tracked blood groups</div>
+        <div class="metric-value" data-count="{{ blood_group_count }}">0</div>
+        <div class="metric-note">Groups currently listed in inventory.</div>
+    </div>
+    <div class="metric-card reveal">
+        <div class="metric-label">Recipients in system</div>
+        <div class="metric-value" data-count="{{ recipient_count }}">0</div>
+        <div class="metric-note">Potential beneficiaries using the portal.</div>
+    </div>
+    <div class="metric-card reveal">
+        <div class="metric-label">Pending requests</div>
+        <div class="metric-value" data-count="{{ pending_requests }}">0</div>
+        <div class="metric-note">Requests that may require follow-up soon.</div>
+    </div>
+</section>
+
+<section class="card-grid two mt-4">
+    <article class="timeline-card reveal">
+        <div class="kicker">Low stock watch</div>
+        <h2 class="section-title">Groups needing attention</h2>
+        <div class="auth-list">
+            {% for item in low_stock_groups %}
+                <div class="auth-list-item">
+                    <strong>{{ item.blood_group }} has {{ item.units_available }} units left</strong>
+                    {% if item.units_available < 6 %}
+                        Consider prioritizing donation outreach for this group.
+                    {% else %}
+                        Stock is stable but worth monitoring.
+                    {% endif %}
+                </div>
+            {% empty %}
+                <div class="auth-list-item">
+                    <strong>No low-stock groups</strong>
+                    Inventory is currently in a healthy range.
+                </div>
+            {% endfor %}
+        </div>
+    </article>
+
+    <article class="cta-card reveal">
+        <div class="kicker">Quick actions</div>
+        <h2 class="section-title">Useful donor shortcuts</h2>
+        <p class="section-copy">This page now acts like a real dashboard instead of a blank heading, with direct paths to the most useful areas.</p>
+        <div class="button-row">
+            <a href="{% url 'inventory' %}" class="primary-btn">Open inventory board</a>
+            <a href="{% url 'logout' %}" class="ghost-btn">Sign out</a>
+        </div>
+    </article>
+</section>
+{% endblock %}

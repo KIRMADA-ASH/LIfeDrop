@@ -46,3 +46,19 @@ class AuthFlowTests(TestCase):
         response = self.client.get(reverse('donor_dashboard'))
 
         self.assertRedirects(response, reverse('recipient_dashboard'))
+
+    def test_invalid_user_type_does_not_loop_between_dashboards(self):
+        user = CustomUser.objects.create_user(
+            username='brokenuser',
+            password='pass12345',
+            user_type='recipient',
+            phone='5555555555',
+            city='Delhi',
+        )
+        user.user_type = ''
+        user.save(update_fields=['user_type'])
+        self.client.force_login(user)
+
+        response = self.client.get(reverse('recipient_dashboard'))
+
+        self.assertRedirects(response, reverse('home'))

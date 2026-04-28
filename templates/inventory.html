@@ -1,17 +1,91 @@
 {% extends 'base.html' %}
+{% block title %}PulsePoint | Inventory{% endblock %}
 {% block content %}
-
-<h2 class="text-center mb-4">Blood Inventory 🩸</h2>
-
-<div class="row">
-{% for item in data %}
-    <div class="col-md-3 mb-4" data-aos="fade-up">
-        <div class="card text-center bg-dark p-3 shadow">
-            <h3 class="text-danger">{{ item.blood_group }}</h3>
-            <h5>{{ item.units_available }} Units</h5>
+<section class="hero-panel reveal">
+    <div class="row g-4 align-items-center">
+        <div class="col-lg-7">
+            <div class="eyebrow">Inventory command center</div>
+            <h1 class="hero-title">Track stock before urgency turns into shortage.</h1>
+            <p class="hero-copy">Search by blood group, monitor low-stock risk, and give staff a cleaner view of what is immediately available.</p>
+        </div>
+        <div class="col-lg-5">
+            <div class="metric-grid" style="grid-template-columns: 1fr 1fr;">
+                <div class="metric-card reveal">
+                    <div class="metric-label">Total units</div>
+                    <div class="metric-value" data-count="{{ total_units }}">0</div>
+                    <div class="metric-note">Across all listed groups.</div>
+                </div>
+                <div class="metric-card reveal">
+                    <div class="metric-label">Low stock groups</div>
+                    <div class="metric-value" data-count="{{ low_stock_count }}">0</div>
+                    <div class="metric-note">Groups under 6 units.</div>
+                </div>
+            </div>
         </div>
     </div>
-{% endfor %}
-</div>
+</section>
 
+<section class="form-card reveal mt-4">
+    <div class="section-head mt-0">
+        <div>
+            <div class="kicker">Filter inventory</div>
+            <h2 class="section-title">Search a specific blood group</h2>
+        </div>
+    </div>
+    <form method="get" class="field-grid">
+        <div>
+            <label class="field-label" for="blood_group">Blood group</label>
+            <select id="blood_group" name="blood_group">
+                <option value="">All blood groups</option>
+                {% for group in all_blood_groups %}
+                    <option value="{{ group }}" {% if selected_blood_group == group %}selected{% endif %}>{{ group }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="d-flex align-items-end gap-3">
+            <button type="submit" class="primary-btn border-0">Apply filter</button>
+            <a href="{% url 'inventory' %}" class="secondary-btn">Reset</a>
+        </div>
+    </form>
+</section>
+
+<section class="table-card reveal mt-4">
+    <div class="section-head mt-0">
+        <div>
+            <div class="kicker">Availability</div>
+            <h2 class="section-title">Current blood inventory</h2>
+            <p class="section-copy mb-0">A cleaner list for reception, donor teams, and recipients checking stock.</p>
+        </div>
+    </div>
+    <table class="table-modern">
+        <thead>
+            <tr>
+                <th>Blood Group</th>
+                <th>Units Available</th>
+                <th>Condition</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in data %}
+                <tr>
+                    <td><strong>{{ item.blood_group }}</strong></td>
+                    <td>{{ item.units_available }} units</td>
+                    <td>
+                        {% if item.units_available < 6 %}
+                            <span class="status-pill rejected">Needs attention</span>
+                        {% elif item.units_available < 10 %}
+                            <span class="status-pill pending">Watch closely</span>
+                        {% else %}
+                            <span class="status-pill approved">Healthy stock</span>
+                        {% endif %}
+                    </td>
+                </tr>
+            {% empty %}
+                <tr>
+                    <td colspan="3">No inventory records found for this filter.</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</section>
 {% endblock %}

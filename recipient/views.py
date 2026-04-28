@@ -33,7 +33,13 @@ def request_blood(request):
         messages.success(request, 'Blood request submitted successfully.')
         return redirect('request_status')
 
-    return render(request, 'request_form.html')
+    return render(
+        request,
+        'request_form.html',
+        {
+            'blood_groups': ['A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-'],
+        },
+    )
 
 
 @login_required
@@ -42,5 +48,11 @@ def request_status(request):
         messages.error(request, 'Only recipients can view request status.')
         return redirect('donor_dashboard')
 
-    requests = BloodRequest.objects.filter(user=request.user)
-    return render(request, 'request_status.html', {'requests': requests})
+    requests = BloodRequest.objects.filter(user=request.user).order_by('-id')
+    context = {
+        'requests': requests,
+        'pending_count': requests.filter(status='Pending').count(),
+        'approved_count': requests.filter(status='Approved').count(),
+        'rejected_count': requests.filter(status='Rejected').count(),
+    }
+    return render(request, 'request_status.html', context)
