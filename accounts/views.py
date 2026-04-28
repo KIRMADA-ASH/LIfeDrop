@@ -32,6 +32,12 @@ def home(request):
 
 
 def register(request):
+    if request.user.is_authenticated:
+        dashboard_name = _dashboard_name_for_user(request.user)
+        if dashboard_name is None:
+            return redirect('home')
+        return redirect(dashboard_name)
+
     if request.method == 'POST':
         username = request.POST.get('username', '').strip()
         password = request.POST.get('password', '').strip()
@@ -64,6 +70,12 @@ def register(request):
 
 
 def user_login(request):
+    if request.user.is_authenticated:
+        dashboard_name = _dashboard_name_for_user(request.user)
+        if dashboard_name is None:
+            return redirect('home')
+        return redirect(dashboard_name)
+
     if request.method == 'POST':
         username = request.POST.get('username', '').strip()
         password = request.POST.get('password', '').strip()

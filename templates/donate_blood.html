@@ -1,0 +1,63 @@
+{% extends 'base.html' %}
+{% block title %}PulsePoint | Donate Blood{% endblock %}
+{% block content %}
+<section class="hero-panel reveal">
+    <div class="row g-4 align-items-center">
+        <div class="col-lg-7">
+            <div class="eyebrow">Donor workflow</div>
+            <h1 class="hero-title">Keep your donor details ready for the next urgent need.</h1>
+            <p class="hero-copy">Save your blood group and most recent donation date so the donor side of the portal has a real action instead of just a dashboard placeholder.</p>
+        </div>
+        <div class="col-lg-5">
+            <div class="glass-card reveal">
+                <div class="kicker">Before you save</div>
+                <div class="auth-list">
+                    <div class="auth-list-item">
+                        <strong>Choose the correct blood group</strong>
+                        This makes donor information much more useful.
+                    </div>
+                    <div class="auth-list-item">
+                        <strong>Update your last donation date</strong>
+                        Keep the profile current whenever you donate.
+                    </div>
+                    <div class="auth-list-item">
+                        <strong>Return to the dashboard anytime</strong>
+                        Your donor tools stay one click away.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="form-card reveal mt-4">
+    <div class="section-head mt-0">
+        <div>
+            <div class="kicker">Donate blood</div>
+            <h2 class="section-title">Update donor profile</h2>
+            <p class="section-copy mb-0">This stores the key donor information connected to your account.</p>
+        </div>
+    </div>
+    <form method="post">
+        {% csrf_token %}
+        <div class="field-grid">
+            <div>
+                <label class="field-label" for="blood_group">Blood group</label>
+                <select id="blood_group" name="blood_group" required>
+                    {% for group in blood_groups %}
+                        <option value="{{ group }}" {% if donor_profile and donor_profile.blood_group == group %}selected{% endif %}>{{ group }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div>
+                <label class="field-label" for="last_donation_date">Last donation date</label>
+                <input id="last_donation_date" type="date" name="last_donation_date" value="{% if donor_profile and donor_profile.last_donation_date %}{{ donor_profile.last_donation_date|date:'Y-m-d' }}{% endif %}">
+            </div>
+        </div>
+        <div class="button-row mt-4">
+            <button type="submit" class="primary-btn border-0">Save donor details</button>
+            <a href="{% url 'donor_dashboard' %}" class="ghost-btn">Back to dashboard</a>
+        </div>
+    </form>
+</section>
+{% endblock %}

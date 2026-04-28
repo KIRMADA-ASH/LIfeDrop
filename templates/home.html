@@ -11,8 +11,16 @@
                 and coordinators. Explore live inventory, submit requests quickly, and keep every urgent update visible.
             </p>
             <div class="button-row">
-                <a href="{% url 'register' %}" class="primary-btn">Create an account</a>
-                <a href="{% url 'inventory' %}" class="secondary-btn">Explore live inventory</a>
+                {% if request.user.is_authenticated and request.user.user_type == 'recipient' %}
+                    <a href="{% url 'request_blood' %}" class="primary-btn">Request blood</a>
+                    <a href="{% url 'recipient_dashboard' %}" class="secondary-btn">Open dashboard</a>
+                {% elif request.user.is_authenticated and request.user.user_type == 'donor' %}
+                    <a href="{% url 'donate_blood' %}" class="primary-btn">Donate blood</a>
+                    <a href="{% url 'donor_dashboard' %}" class="secondary-btn">Open dashboard</a>
+                {% else %}
+                    <a href="{% url 'register' %}" class="primary-btn">Create an account</a>
+                    <a href="{% url 'inventory' %}" class="secondary-btn">Explore live inventory</a>
+                {% endif %}
             </div>
         </div>
         <div class="col-lg-5">
@@ -94,12 +102,26 @@
         <div class="col-lg-8">
             <div class="kicker">Start now</div>
             <h2 class="section-title mb-2">Make the blood bank feel modern, organized, and dependable.</h2>
-            <p class="section-copy mb-0">Create an account as a donor or recipient and move through the platform with a much clearer experience than before.</p>
+            {% if request.user.is_authenticated and request.user.user_type == 'recipient' %}
+                <p class="section-copy mb-0">Jump straight into requesting blood or tracking your existing requests.</p>
+            {% elif request.user.is_authenticated and request.user.user_type == 'donor' %}
+                <p class="section-copy mb-0">Open your donor tools and keep your donation details up to date.</p>
+            {% else %}
+                <p class="section-copy mb-0">Create an account as a donor or recipient and move through the platform with a much clearer experience than before.</p>
+            {% endif %}
         </div>
         <div class="col-lg-4">
             <div class="button-row justify-content-lg-end">
-                <a href="{% url 'register' %}" class="primary-btn">Join PulsePoint</a>
-                <a href="{% url 'login' %}" class="ghost-btn">Sign in</a>
+                {% if request.user.is_authenticated and request.user.user_type == 'recipient' %}
+                    <a href="{% url 'request_status' %}" class="primary-btn">Track requests</a>
+                    <a href="{% url 'inventory' %}" class="ghost-btn">Browse inventory</a>
+                {% elif request.user.is_authenticated and request.user.user_type == 'donor' %}
+                    <a href="{% url 'donate_blood' %}" class="primary-btn">Donate Blood</a>
+                    <a href="{% url 'inventory' %}" class="ghost-btn">Browse inventory</a>
+                {% else %}
+                    <a href="{% url 'register' %}" class="primary-btn">Join PulsePoint</a>
+                    <a href="{% url 'login' %}" class="ghost-btn">Sign in</a>
+                {% endif %}
             </div>
         </div>
     </div>

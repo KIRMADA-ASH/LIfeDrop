@@ -8,8 +8,8 @@
             <h1 class="hero-title">Welcome back, {{ request.user.username }}.</h1>
             <p class="hero-copy">This donor dashboard gives you a clearer view of current demand, live inventory health, and where support may soon be needed.</p>
             <div class="button-row">
-                <a href="{% url 'inventory' %}" class="primary-btn">Review inventory</a>
-                <a href="{% url 'home' %}" class="secondary-btn">Back to overview</a>
+                <a href="{% url 'donate_blood' %}" class="primary-btn">Donate blood</a>
+                <a href="{% url 'inventory' %}" class="secondary-btn">Review inventory</a>
             </div>
         </div>
         <div class="col-lg-5">
@@ -80,8 +80,8 @@
         <h2 class="section-title">Useful donor shortcuts</h2>
         <p class="section-copy">This page now acts like a real dashboard instead of a blank heading, with direct paths to the most useful areas.</p>
         <div class="button-row">
-            <a href="{% url 'inventory' %}" class="primary-btn">Open inventory board</a>
-            <a href="{% url 'logout' %}" class="ghost-btn">Sign out</a>
+            <a href="{% url 'donate_blood' %}" class="primary-btn">Update donor details</a>
+            <a href="{% url 'inventory' %}" class="ghost-btn">Open inventory board</a>
         </div>
     </article>
 </section>

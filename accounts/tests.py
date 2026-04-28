@@ -62,3 +62,34 @@ class AuthFlowTests(TestCase):
         response = self.client.get(reverse('recipient_dashboard'))
 
         self.assertRedirects(response, reverse('home'))
+
+    def test_logged_in_user_is_redirected_away_from_auth_pages(self):
+        user = CustomUser.objects.create_user(
+            username='donor2',
+            password='pass12345',
+            user_type='donor',
+            phone='9999999999',
+            city='Pune',
+        )
+        self.client.force_login(user)
+
+        login_response = self.client.get(reverse('login'))
+        register_response = self.client.get(reverse('register'))
+
+        self.assertRedirects(login_response, reverse('donor_dashboard'))
+        self.assertRedirects(register_response, reverse('donor_dashboard'))
+
+    def test_home_hides_create_account_for_logged_in_recipient(self):
+        user = CustomUser.objects.create_user(
+            username='recipient2',
+            password='pass12345',
+            user_type='recipient',
+            phone='8888888888',
+            city='Chennai',
+        )
+        self.client.force_login(user)
+
+        response = self.client.get(reverse('home'))
+
+        self.assertContains(response, 'Request blood')
+        self.assertNotContains(response, 'Create an account')

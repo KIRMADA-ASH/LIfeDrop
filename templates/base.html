@@ -678,6 +678,7 @@
                 <a href="{% url 'request_status' %}" class="nav-pill {% if request.resolver_match.url_name == 'request_status' %}active{% endif %}">Track Requests</a>
             {% elif request.user.is_authenticated and request.user.user_type == 'donor' %}
                 <a href="{% url 'donor_dashboard' %}" class="nav-pill {% if request.resolver_match.url_name == 'donor_dashboard' %}active{% endif %}">Dashboard</a>
+                <a href="{% url 'donate_blood' %}" class="nav-pill {% if request.resolver_match.url_name == 'donate_blood' %}active{% endif %}">Donate Blood</a>
             {% endif %}
             {% if request.user.is_authenticated %}
                 <a href="{% url 'logout' %}" class="nav-pill cta">Logout</a>
